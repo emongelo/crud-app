@@ -1,0 +1,265 @@
+---
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: "CRUD API"
+host: "localhost:3000"
+basePath: "/"
+schemes:
+- "http"
+- "https"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /client:
+    get:
+      description: "get the clients list"
+      operationId: "getAll"
+      parameters: []
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/GetClientsListResponse"
+        default:
+          description: "Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      x-swagger-router-controller: "client"
+    post:
+      description: "add a new client to the list"
+      operationId: "save"
+      parameters:
+      - name: "data"
+        in: "body"
+        description: "Client properties"
+        required: true
+        schema:
+          $ref: "#/definitions/Client"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/GeneralResponse"
+        default:
+          description: "Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      x-swagger-router-controller: "client"
+    x-swagger-router-controller: "client"
+  /client/{name}:
+    get:
+      description: "get a client"
+      operationId: "getOne"
+      parameters:
+      - name: "name"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/GetClientResponse"
+        default:
+          description: "Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      x-swagger-router-controller: "client"
+    put:
+      description: "update a client"
+      operationId: "update"
+      parameters:
+      - name: "name"
+        in: "path"
+        description: "Movie name"
+        required: true
+        type: "string"
+      - name: "data"
+        in: "body"
+        description: "Client object"
+        required: true
+        schema:
+          $ref: "#/definitions/Client"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/GeneralResponse"
+        default:
+          description: "Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      x-swagger-router-controller: "client"
+    delete:
+      description: "delete a client"
+      operationId: "delClient"
+      parameters:
+      - name: "name"
+        in: "path"
+        description: "Client name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/GeneralResponse"
+        default:
+          description: "Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      x-swagger-router-controller: "client"
+    x-swagger-router-controller: "client"
+  /swagger:
+    x-swagger-pipe: "swagger_raw"
+definitions:
+  GetClientsListResponse:
+    required:
+    - "clients"
+    - "providers"
+    properties:
+      clients:
+        type: "array"
+        items:
+          $ref: "#/definitions/GetClientsListResponse_clients"
+      providers:
+        type: "array"
+        xml:
+          name: "provider"
+          wrapped: true
+        items:
+          $ref: "#/definitions/Provider"
+    example:
+      clients:
+      - phone: 0.80082819046101150206595775671303272247314453125
+        name: "name"
+        email: "email"
+        providers:
+        - id: 6.02745618307040320615897144307382404804229736328125
+        - id: 6.02745618307040320615897144307382404804229736328125
+      - phone: 0.80082819046101150206595775671303272247314453125
+        name: "name"
+        email: "email"
+        providers:
+        - id: 6.02745618307040320615897144307382404804229736328125
+        - id: 6.02745618307040320615897144307382404804229736328125
+      providers:
+      - name: "name"
+        id: 1.46581298050294517310021547018550336360931396484375
+      - name: "name"
+        id: 1.46581298050294517310021547018550336360931396484375
+  GetClientResponse:
+    required:
+    - "email"
+    - "name"
+    - "phone"
+    - "providers"
+    properties:
+      name:
+        type: "string"
+      email:
+        type: "string"
+      phone:
+        type: "number"
+      providers:
+        type: "array"
+        items:
+          $ref: "#/definitions/GetClientsListResponse_providers"
+    example:
+      phone: 0.80082819046101150206595775671303272247314453125
+      name: "name"
+      email: "email"
+      providers:
+      - id: 6.02745618307040320615897144307382404804229736328125
+      - id: 6.02745618307040320615897144307382404804229736328125
+  Client:
+    type: "object"
+    required:
+    - "email"
+    - "name"
+    - "phone"
+    properties:
+      name:
+        type: "string"
+        description: "Client name"
+      email:
+        type: "string"
+        description: "Client email"
+      phone:
+        type: "number"
+        description: "Client phone"
+      providers:
+        type: "array"
+        items:
+          $ref: "#/definitions/GetClientsListResponse_providers"
+    example:
+      phone: 0.80082819046101150206595775671303272247314453125
+      name: "name"
+      email: "email"
+      providers:
+      - id: 6.02745618307040320615897144307382404804229736328125
+      - id: 6.02745618307040320615897144307382404804229736328125
+  Provider:
+    type: "object"
+    required:
+    - "id"
+    - "name"
+    properties:
+      id:
+        type: "number"
+        description: "Provider ID"
+      name:
+        type: "string"
+        description: "Provider name"
+    example:
+      name: "name"
+      id: 1.46581298050294517310021547018550336360931396484375
+  GeneralResponse:
+    type: "object"
+    required:
+    - "description"
+    - "success"
+    properties:
+      success:
+        type: "number"
+        description: "returns 1 if successful"
+      description:
+        type: "string"
+        description: "a short comment"
+    example:
+      success: 0.80082819046101150206595775671303272247314453125
+      description: "description"
+  ErrorResponse:
+    required:
+    - "message"
+    properties:
+      message:
+        type: "string"
+  GetClientsListResponse_providers:
+    properties:
+      id:
+        type: "number"
+    example:
+      id: 6.02745618307040320615897144307382404804229736328125
+  GetClientsListResponse_clients:
+    properties:
+      name:
+        type: "string"
+      email:
+        type: "string"
+      phone:
+        type: "number"
+      providers:
+        type: "array"
+        items:
+          $ref: "#/definitions/GetClientsListResponse_providers"
+    example:
+      phone: 0.80082819046101150206595775671303272247314453125
+      name: "name"
+      email: "email"
+      providers:
+      - id: 6.02745618307040320615897144307382404804229736328125
+      - id: 6.02745618307040320615897144307382404804229736328125
